@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const router = require("./routes");
 require("dotenv").config();
 app.use(express.json());
+const cors = require('cors')
+
+app.use(cors());
 app.use(router);
 (async function main() {
   try {

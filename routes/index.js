@@ -1,6 +1,7 @@
 "use strict";
 
 const router = require("express").Router();
+
 const order = require("./order");
 const creditScore = require("./creditScore");
 
