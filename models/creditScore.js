@@ -16,30 +16,21 @@ async function getCreditScoreByUserId(user_id) {
   return CreditScore.findOne({ user_id: user_id });
 }
 
-async function updateCreditScore({}) {
-  return CreditScore.create({});
+async function updateCreditScore(creditScore) {
+  console.log(creditScore);
+  return CreditScore.findOneAndUpdate(
+    { user_id: creditScore.user_id },
+    creditScore,
+    { new: true }
+  );
 }
 
-async function createCreditScore(
-  user_id,
-  score,
-  total_payments,
-  default_payments,
-  total_due,
-  allowed_balance,
-  used_balance,
-  total_full_loan_repayments
-) {
-  return await CreditScore.create({
-    user_id,
-    score,
-    total_payments,
-    default_payments,
-    total_due,
-    allowed_balance,
-    used_balance,
-    total_full_loan_repayments,
-  });
+async function createCreditScore(userProfile) {
+  return await CreditScore.create(userProfile);
 }
 
-module.exports = { getCreditScoreByUserId, createCreditScore };
+module.exports = {
+  getCreditScoreByUserId,
+  createCreditScore,
+  updateCreditScore,
+};

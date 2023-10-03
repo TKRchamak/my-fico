@@ -1,9 +1,13 @@
 const OrderModel = require("../models/order");
+const CreditScoreUtils = require("../utils/creditScore/adjustCreditScore");
 const { updatePaymentArray } = require("../utils/payment");
-const payment = async (req, res) => {
+const createOrder = async (req, res) => {
   try {
+    const creditScore = await CreditScoreUtils.adjustAfterOrderCreation(
+      req.body
+    );
     const order = await OrderModel.createOrder(req.body);
-    res.send(order);
+    res.send({ order, creditScore });
   } catch (e) {
     console.log(e);
   }
@@ -30,34 +34,32 @@ const getUpcomingPaymentsByUserId = async (req, res) => {
 };
 
 const addPaymentToExistingOrder = async (req, res) => {
-  // req.body = {
-  //   order_id,
-  //   payment_id,
-  //   payment_date
-  // }
   try {
     const orderToUpdate = await OrderModel.getOrdersByOrderId(
       req.body.order_id
     );
-    // console.log(orderToUpdate);
-    let updatedOrder = updatePaymentArray(
+
+    let updatedOrderBody = updatePaymentArray(
       req.body.payment_id,
       req.body.payment_date,
       orderToUpdate
     );
-    // console.log(updatedOrder);
-    const updatedOrderTwo = await OrderModel.findOneOrderAndUpdate(
-      updatedOrder
+    const updatedCreditScore = await CreditScoreUtils.adjustAfterPayment(
+      updatedOrderBody.user_id,
+      updatedOrderBody.payments[0].payable
     );
-    console.log(updatedOrderTwo);
-    res.send(updatedOrderTwo);
+
+    const updatedOrder = await OrderModel.findOneOrderAndUpdate(
+      updatedOrderBody
+    );
+    res.send({ updatedOrder, updatedCreditScore });
   } catch (error) {
     console.log(error);
   }
 };
 
 module.exports = {
-  payment,
+  createOrder,
   getOrdersByUserId,
   getUpcomingPaymentsByUserId,
   addPaymentToExistingOrder,
