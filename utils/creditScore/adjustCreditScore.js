@@ -32,4 +32,18 @@ async function adjustAfterOrderCreation(requestBody) {
   }
 }
 
-module.exports = { adjustAfterOrderCreation };
+async function adjustAfterPayment(user_id, amount_paid) {
+  return await CreditScore.updateCreditScore(
+    Object.assign(
+      { user_id: user_id },
+      {
+        $inc: {
+          total_payments: 1,
+          used_balance: -1 * amount_paid,
+        },
+      }
+    )
+  );
+}
+
+module.exports = { adjustAfterOrderCreation, adjustAfterPayment };
