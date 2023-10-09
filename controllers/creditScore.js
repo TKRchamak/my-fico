@@ -65,7 +65,10 @@ const eligibility = async (req, res) => {
 
 const getCreditScoreByUserId = async (req, res) => {
   try {
-    res.send();
+    const creditScore = await CreditScore.getCreditScoreByUserId(
+      req.body.user_id
+    );
+    res.send(creditScore);
   } catch (e) {
     console.log(e);
   }
