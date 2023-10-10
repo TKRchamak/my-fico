@@ -25,14 +25,6 @@ async function updateCreditScore(creditScore) {
   );
 }
 
-async function updateCreditScore(creditScore) {
-  return CreditScore.findOneAndUpdate(
-    { user_id: creditScore.user_id },
-    creditScore,
-    { new: true }
-  );
-}
-
 async function createCreditScore(userProfile) {
   return await CreditScore.create(userProfile);
 }
