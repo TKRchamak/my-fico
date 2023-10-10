@@ -4,5 +4,5 @@ const router = express.Router();
 
 router.post("/credit-options", creditScoreController.getCreditOptions);
 router.post("/eligibility", creditScoreController.eligibility);
-router.get("/", creditScoreController.getCreditScoreByUserId);
+router.post("/", creditScoreController.getCreditScoreByUserId);
 module.exports = router;

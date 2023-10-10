@@ -17,7 +17,7 @@ async function getCreditScoreByUserId(user_id) {
 }
 
 async function updateCreditScore(creditScore) {
-  console.log(creditScore);
+  // console.log(creditScore);
   return CreditScore.findOneAndUpdate(
     { user_id: creditScore.user_id },
     creditScore,

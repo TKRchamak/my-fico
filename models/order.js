@@ -14,7 +14,7 @@ const OrderSchema = new Schema({
       defaults: { type: Number, required: false },
     },
   ],
-  active: { type: Boolean, required: false },
+  active: { type: Boolean, required: false, default: true },
 });
 
 const Order = model("Order", OrderSchema);
@@ -28,6 +28,7 @@ async function getOrdersByOrderId(order_id) {
 }
 
 async function getUpcomingPaymentsByUserId(user_id) {
+  // console.log(user_id);
   return Order.aggregate([
     { $match: { $and: [{ user_id: user_id }, { active: true }] } },
     { $unwind: "$payments" },
@@ -40,6 +41,8 @@ async function getUpcomingPaymentsByUserId(user_id) {
 }
 
 async function createOrder(order) {
+  // console.log("=============createOrder===============");
+  // console.log(order);
   const payments = formFuturePaymentDeadlines(
     order.payments[0].paymentDeadline,
     order.payments[0].payable,

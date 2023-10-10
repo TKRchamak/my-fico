@@ -14,8 +14,9 @@ const getCreditOptions = async (req, res) => {
     let creditOptions = CreditOptionsUtils.getCreditOptions(500);
 
     if (creditScore) {
-      const grade = creditScoreToGrade(creditScore);
-      creditOptions = CreditOptionsUtils.getCreditOptions(grade);
+
+      creditOptions = CreditOptionsUtils.getCreditOptions(creditScore.score);
+
     }
     res.send(rearrangeCreditOptions(creditOptions));
   } catch (e) {
@@ -65,7 +66,8 @@ const eligibility = async (req, res) => {
 
 const getCreditScoreByUserId = async (req, res) => {
   try {
-    res.send();
+    const creditScore = await CreditScore.getCreditScoreByUserId(req.body.user_id);
+    res.send(creditScore);
   } catch (e) {
     console.log(e);
   }

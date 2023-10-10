@@ -1,4 +1,5 @@
 function rearrangeCreditOptions(raw) {
+  // console.log(raw)
   let prepared = [];
   let length = 0;
   for (let numberOfInstallments in raw) {
@@ -7,6 +8,7 @@ function rearrangeCreditOptions(raw) {
       interest_rate: raw[numberOfInstallments],
     });
   }
+
   return prepared;
 }
 
